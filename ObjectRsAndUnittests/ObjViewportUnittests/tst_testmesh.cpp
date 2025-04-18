@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <QTextStream>
 #include "../ObjViewport/mesh.h"
+#include "../ObjViewport/drawablegrid.h"
 
 // add necessary includes here
 
@@ -19,6 +20,7 @@ private slots:
     void testBuildTriangleVertexIndices();
     void testPackTriangleVertexCoords();
     void testNormals();
+    void testGridCalculate();
 };
 
 TestMesh::TestMesh() {}
@@ -36,7 +38,7 @@ void TestMesh::testNormals()
     QVector<int> starts = {0, 3, 7};
     QVector<int> triangleIndices = MeshTools::buildTriangleVertexIndices(indices, starts);
     QVector<float> data = MeshTools::packTriangleVertexCoords(vertices, triangleIndices);
-    QVector<float> data2 = MeshTools::packTriangleNormalsCoords(vertices, triangleIndices);
+    QVector<float> data2 = MeshTools::buildAndPackTriangleNormalsCoords(vertices, triangleIndices);
         QCOMPARE(data.size(), data2.size());
 }
 
@@ -67,7 +69,15 @@ void TestMesh::testPackTriangleVertexCoords()
     //}
     //out << '\n';
     QCOMPARE(data, excepted);
+}
 
+void TestMesh::testGridCalculate(){
+    QVector<QVector2D> lines = DrawableGrid(1, 3, QColor(1, 2, 3)).getGrid2D();
+    QTextStream out(stdout);
+    for(int i = 0; i < lines.size(); i += 1)
+    {
+        out << '(' << lines[i].x() << ", " << lines[i].y() << ')' << '\n';
+    }
 }
 
 QTEST_APPLESS_MAIN(TestMesh)

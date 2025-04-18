@@ -14,6 +14,10 @@ include(../ObjReader/ObjReader.pri)
 
 SOURCES += \
     camera.cpp \
+    draw.cpp \
+    drawablegrid.cpp \
+    drawablemesh.cpp \
+    drawableobject.cpp \
     main.cpp \
     mainwindow.cpp \
     mesh.cpp \
@@ -21,6 +25,10 @@ SOURCES += \
 
 HEADERS += \
     camera.h \
+    draw.h \
+    drawablegrid.h \
+    drawablemesh.h \
+    drawableobject.h \
     mainwindow.h \
     mesh.h \
     viewport.h
@@ -36,5 +44,7 @@ FORMS += \
 DISTFILES += \
     ../ObjReader/airboat.obj \
     FragmentShader.frag \
+    GridFragmentShader.frag \
+    GridVertexShader.vert \
     ObjViewport.pri \
     VertexShader.vert

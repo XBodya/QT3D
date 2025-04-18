@@ -70,7 +70,7 @@ QVector3D MeshTools::getCentreBoundingBox(QVector3D maxXYZ, QVector3D minXYZ)
     return QVector3D((maxXYZ[0] + minXYZ[0]) / 2, (maxXYZ[1] + minXYZ[1]) / 2, (maxXYZ[2] + minXYZ[2]) / 2);
 }
 
-QVector<float> MeshTools::packTriangleNormalsCoords(QVector<QVector3D> &vertices, QVector<int> &polygonTriangleVertexIndices)
+QVector<float> MeshTools::buildAndPackTriangleNormalsCoords(QVector<QVector3D> &vertices, QVector<int> &polygonTriangleVertexIndices)
 {
     QVector<float> triagnleNormalsCoords;
     for(int vIndInd = 0; vIndInd < polygonTriangleVertexIndices.size(); vIndInd += 3)
@@ -83,4 +83,30 @@ QVector<float> MeshTools::packTriangleNormalsCoords(QVector<QVector3D> &vertices
                 triagnleNormalsCoords.push_back(triangleNormal[i]);
     }
     return triagnleNormalsCoords;
+}
+
+QVector3D MeshTools::makeVector3D(QVector2D point, int zeroCoordIndex)
+{
+    switch (zeroCoordIndex) {
+    case 0:
+        return QVector3D(0, point.x(), point.y());
+    case 1:
+        return QVector3D(point.x(), 0, point.y());
+    case 2:
+        return QVector3D(0, point.x(), point.y());
+    }
+    return QVector3D();
+}
+
+QVector<float> MeshTools::pack2DLinesTo3D(QVector<QVector2D> lines, int zeroCoordIndex)
+{
+    // lines vector must be in format {startPointLine1, endPointLine1, startPointLine2, endPointLine2, ..., startPointLineN, endPointLineN}
+    QVector<float> packedLines;
+    for(int i = 0; i < lines.size(); ++i)
+    {
+        QVector3D point = makeVector3D(lines[i], zeroCoordIndex);
+        for(int j = 0; j < 3; ++j)
+            packedLines.append(point[j]);
+    }
+    return packedLines;
 }

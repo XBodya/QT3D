@@ -1,5 +1,7 @@
 #include "viewport.h"
 #include "mesh.h"
+#include "draw.h"
+#include "drawablegrid.h"
 
 #include <QMatrix4x4>
 #include <QString>
@@ -9,13 +11,20 @@
 
 Viewport::Viewport(QWidget *parent)
     : QOpenGLWidget(parent)
-{}
+{
+
+}
 
 Viewport::~Viewport()
 {
     delete m_vertexBuffer;
     delete m_normalsBuffer;
     delete m_shader;
+    delete m_grid;
+    m_vertexBuffer = nullptr;
+    m_normalsBuffer = nullptr;
+    m_shader = nullptr;
+    m_grid = nullptr;
 }
 
 void Viewport::initializeGL()
@@ -25,6 +34,10 @@ void Viewport::initializeGL()
     QString fragmentShaderFilename = "C:\\Users\\games\\gits\\r3ds\\ObjectRsAndUnittests\\ObjViewport\\FragmentShader.frag";
     m_shader = createShaderProgram(vertexShaderFilename, fragmentShaderFilename);
     Q_ASSERT(m_shader != nullptr);
+
+    m_grid = new DrawableGrid();
+    m_grid->setShader("C:\\Users\\games\\gits\\QT3D\\ObjectRsAndUnittests\\ObjViewport\\GridVertexShader.vert",
+                      "C:\\Users\\games\\gits\\QT3D\\ObjectRsAndUnittests\\ObjViewport\\GridFragmentShader.frag");
 }
 
 void Viewport::resizeGL(int width, int height)
@@ -54,14 +67,16 @@ void Viewport::paintGL(){
     m_modelViewMatrix = m_modelViewMatrix * rotation;
 
     float screenAspectRatio = width() / float(height());
-    m_projectionMatrix.ortho(-1, 1, -1 / screenAspectRatio, 1 / screenAspectRatio, m_camera.m_zNear, m_camera.m_zFar);
-
+    //m_projectionMatrix.ortho(-1, 1, -1 / screenAspectRatio, 1 / screenAspectRatio, m_camera.m_zNear, m_camera.m_zFar);
+    m_projectionMatrix.ortho(-10, 10, -10 / screenAspectRatio, 10 / screenAspectRatio, -10, 10);
     // projectionMatrix.ortho(-1, 1, -1 / screenAspectRatio, 1 / screenAspectRatio, 0.5, 0.5);
 
     //QTextStream out(stdout);
     //out << "Curpos and scale:\n";
     //out << m_camera.m_currentCameraPosition.x() << ' ' << m_camera.m_currentCameraPosition.y() << ' ' << m_camera.m_currentCameraPosition.z() << '\n';
     //out << " " << ' ' << m_camera.m_scale << '\n';
+
+    m_grid->draw(m_modelViewMatrix, m_projectionMatrix);
 
 
     if(!m_shader->bind())
@@ -101,7 +116,7 @@ bool Viewport::addObject(QVector<QVector3D> vertices, QVector<int> polygonVertex
 {
     QVector<int> triangleVertexIndices = MeshTools::buildTriangleVertexIndices(polygonVertexIndices, startPolygon);
     QVector<float> triangleVertexCoords = MeshTools::packTriangleVertexCoords(vertices, triangleVertexIndices);
-    QVector<float> triangleNormalsCoords = MeshTools::packTriangleNormalsCoords(vertices, triangleVertexIndices);
+    QVector<float> triangleNormalsCoords = MeshTools::buildAndPackTriangleNormalsCoords(vertices, triangleVertexIndices);
     m_vertexBuffer = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     if(!m_vertexBuffer->create())
         return false;
@@ -132,23 +147,7 @@ bool Viewport::addObject(QVector<QVector3D> vertices, QVector<int> polygonVertex
 
 QOpenGLShaderProgram *Viewport::createShaderProgram(QString vertexShaderFilename, QString fragmentShaderFilename)
 {
-    QOpenGLShaderProgram *shader = new QOpenGLShaderProgram();
-    if(!shader->addShaderFromSourceFile(QOpenGLShader::Vertex, vertexShaderFilename))
-    {
-        delete shader;
-        return nullptr;
-    }
-    if(!shader->addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentShaderFilename))
-    {
-        delete shader;
-        return nullptr;
-    }
-    if(!shader->link())
-    {
-        delete shader;
-        return nullptr;
-    }
-    return shader;
+    return GlDrawTools::createShaderProgram(vertexShaderFilename, fragmentShaderFilename);
 }
 
 bool Viewport::changeFragmentColor(QColor color)

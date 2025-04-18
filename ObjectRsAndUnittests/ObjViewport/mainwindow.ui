@@ -43,7 +43,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Change colors with normals</string>
+     <string>Change colors by normal map</string>
     </property>
    </widget>
   </widget>

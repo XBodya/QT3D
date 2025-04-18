@@ -8,6 +8,8 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 
+#include "drawablegrid.h"
+
 #include "camera.h"
 
 class Viewport : public QOpenGLWidget
@@ -24,7 +26,6 @@ public:
     void changeRotateAngles(QVector3D dAngles);
     void setFitToView(QVector<QVector3D> &vertices);
     void updateFitToView();
-
     ViewportTypes::Camera m_camera;
     QMatrix4x4 m_modelViewMatrix, m_projectionMatrix;
 
@@ -43,6 +44,8 @@ public:
     float m_radiusOfModel = 0;
 
 protected:
+    DrawableGrid* m_grid = nullptr;
+
     void initializeGL() override;
     void resizeGL(int width, int height) override;
     void paintGL() override;
