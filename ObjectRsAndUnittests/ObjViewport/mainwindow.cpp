@@ -46,8 +46,9 @@ void MainWindow::changeMeshColor()
     {
         return;
     }
-    ui->m_viewport->changeFragmentColor(color);
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->changeFragmentColor(color);
+
     ui->m_viewport->update();
 }
 
@@ -68,65 +69,73 @@ void MainWindow::on_actionColor_triggered()
 
 void MainWindow::on_actionUp_z_triggered()
 {
-    ui->m_viewport->m_camera.move(QVector3D{0, 0, 0.1});
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.move(QVector3D{0, 0, 0.1});
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionDown_z_triggered()
 {
-    ui->m_viewport->m_camera.move(QVector3D{0, 0, -0.1});
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.move(QVector3D{0, 0, -0.1});
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionUp_x_triggered()
 {
-    ui->m_viewport->m_camera.move(QVector3D{0.1, 0, 0});
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.move(QVector3D{0.1, 0, 0});
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionDown_x_triggered()
 {
-    ui->m_viewport->m_camera.move(QVector3D{-0.1, 0, 0});
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.move(QVector3D{-0.1, 0, 0});
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionDown_y_triggered()
 {
-    ui->m_viewport->m_camera.move(QVector3D{0, -0.1, 0});
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.move(QVector3D{0, -0.1, 0});
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionUp_y_triggered()
 {
-    ui->m_viewport->m_camera.move(QVector3D{0, 0.1, 0});
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.move(QVector3D{0, 0.1, 0});
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionReset_triggered()
 {
+    ui->m_viewport->makeCurrent();
     ui->m_viewport->m_camera.resetCamera();
     ui->m_viewport->m_rotateAngles = {0.0f, 0.0f, 0.0f};
-    ui->m_viewport->makeCurrent();
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionZoom_In_triggered()
 {
-    ui->m_viewport->m_camera.zoom(0.1);
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.zoom(0.1);
+
     ui->m_viewport->update();
 
 }
@@ -135,24 +144,27 @@ void MainWindow::on_actionZoom_In_triggered()
 
 void MainWindow::on_actionZoom_out_triggered()
 {
-    ui->m_viewport->m_camera.zoom(-0.1);
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_camera.zoom(-0.1);
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionRotate_by_Z_axis_triggered()
 {
-    ui->m_viewport->changeRotateAngles(QVector3D(0, 0, 10));
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->changeRotateAngles(QVector3D(0, 0, 10));
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionRotate_by_X_axis_triggered()
 {
-    ui->m_viewport->changeRotateAngles(QVector3D(10, 0, 0));
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->changeRotateAngles(QVector3D(10, 0, 0));
+
     ui->m_viewport->update();
 }
 
@@ -162,24 +174,27 @@ void MainWindow::on_actionRotate_by_Y_axis_triggered()
     // float newAngle = (ui->m_viewport->m_rotateAngles[1] + 10.0f);
     // if(newAngle > 360) newAngle = (newAngle - 360.0f);;
     // ui->m_viewport->m_rotateAngles[1] = newAngle;
-    ui->m_viewport->changeRotateAngles(QVector3D(0, 10, 0));
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->changeRotateAngles(QVector3D(0, 10, 0));
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_actionFit_model_triggered()
 {
-    ui->m_viewport->updateFitToView();
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->updateFitToView();
+
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_m_checkBox_stateChanged(int arg1)
 {
-    ui->m_viewport->m_drawPixelByNormalCoords = arg1;
     ui->m_viewport->makeCurrent();
+    ui->m_viewport->m_drawPixelByNormalCoords = arg1;
+
     ui->m_viewport->update();
 }
 

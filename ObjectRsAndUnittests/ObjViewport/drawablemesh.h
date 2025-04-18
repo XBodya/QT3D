@@ -12,11 +12,12 @@ class DrawableMesh: public DrawableObject
 {
 public:
     DrawableMesh(QString fragmentShaderFilename, QString vertexShaderFilename);
-    virtual ~DrawableMesh() = 0;
+    virtual ~DrawableMesh();
     void draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix) override;
 protected:
     int m_nVertices = -1;
 
+    QOpenGLBuffer* m_vertices = nullptr;
     QOpenGLBuffer* m_normals = nullptr;
     QOpenGLShaderProgram* m_shader = nullptr;
 };
