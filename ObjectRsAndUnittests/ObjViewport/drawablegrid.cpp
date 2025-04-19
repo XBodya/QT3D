@@ -83,7 +83,7 @@ void DrawableGrid::draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix)
 
     m_shader->setUniformValue("modelViewMatrix", viewMatrix);
     m_shader->setUniformValue("projectionMatrix", projectionMatrix);
-    m_shader->setUniformValue("gridColor", QVector4D(m_color.redF(), m_color.greenF(), m_color.blueF(), m_color.alphaF()));
+    m_shader->setUniformValue("gridColor", QVector4D(GlDrawTools::toRGBf(m_color), m_color.alphaF()));
 
     if(!m_vertices->bind())
         qFatal("Cannot bind vertex buffer");

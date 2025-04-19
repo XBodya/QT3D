@@ -9,6 +9,7 @@
 #include <QOpenGLShaderProgram>
 
 #include "drawablegrid.h"
+#include "drawableobject.h"
 
 #include "camera.h"
 
@@ -21,6 +22,7 @@ public:
     ~Viewport();
 
     bool addObject(QVector<QVector3D> vertices, QVector<int> polygonVertexIndices, QVector<int> startPolygon);
+    bool addObject(DrawableObject* obj);
     QOpenGLShaderProgram* createShaderProgram(QString vertexShaderFilename, QString fragmentShaderFilename);
     bool changeFragmentColor(QColor color);
     void changeRotateAngles(QVector3D dAngles);
@@ -57,6 +59,8 @@ protected:
     void mousePressEvent(QMouseEvent* mouseEvent) override;
     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
     void wheelEvent(QWheelEvent* event) override;
+
+    QVector<DrawableObject*> m_drawableObjects;
 
 };
 #endif // VIEWPORT_H

@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "drawablemesh.h"
+#include "mesh.h"
 
 #include <QFileDialog>
 #include <QString>
@@ -33,9 +35,19 @@ void MainWindow::loadMesh()
         QMessageBox::warning(this, "Failed to load mesh", errorMsg);
         return;
     }
+    QString vertexShaderFilename = "C:\\Users\\games\\gits\\r3ds\\ObjectRsAndUnittests\\ObjViewport\\VertexShader.vert";
+    QString fragmentShaderFilename = "C:\\Users\\games\\gits\\r3ds\\ObjectRsAndUnittests\\ObjViewport\\FragmentShader.frag";
+    QVector<int> triangleVertexIndices = MeshTools::buildTriangleVertexIndices(objData.m_polygonVertexIndices, objData.m_startPolygonVertexIndices);
+    QVector<float> triangleVertexCoords = MeshTools::packTriangleVertexCoords(objData.m_vertices, triangleVertexIndices);
+    QVector<float> triangleNormalsCoords = MeshTools::buildAndPackTriangleNormalsCoords(objData.m_vertices, triangleVertexIndices);
+
+
+    DrawableMesh* mesh = new DrawableMesh(vertexShaderFilename, fragmentShaderFilename, triangleVertexCoords, triangleNormalsCoords);
+
 
     ui->m_viewport->makeCurrent();
-    ui->m_viewport->addObject(objData.m_vertices, objData.m_polygonVertexIndices, objData.m_startPolygonVertexIndices);
+    //ui->m_viewport->addObject(objData.m_vertices, objData.m_polygonVertexIndices, objData.m_startPolygonVertexIndices);
+    ui->m_viewport->addObject(mesh);
     ui->m_viewport->update();
 }
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1030</width>
     <height>600</height>
    </rect>
   </property>
@@ -38,12 +38,22 @@
      <rect>
       <x>70</x>
       <y>510</y>
-      <width>211</width>
+      <width>231</width>
       <height>26</height>
      </rect>
     </property>
     <property name="text">
      <string>Change colors by normal map</string>
+    </property>
+   </widget>
+   <widget class="QListView" name="listView">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>20</y>
+      <width>256</width>
+      <height>481</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -52,7 +62,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1030</width>
      <height>25</height>
     </rect>
    </property>

@@ -110,3 +110,4 @@ QVector<float> MeshTools::pack2DLinesTo3D(QVector<QVector2D> lines, int zeroCoor
     }
     return packedLines;
 }
+

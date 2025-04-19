@@ -20,3 +20,9 @@ QOpenGLShaderProgram* GlDrawTools::createShaderProgram(QString vertexShaderFilen
     }
     return shader;
 }
+
+
+QVector3D GlDrawTools::toRGBf(QColor color)
+{
+    return QVector3D(color.redF(), color.greenF(), color.blueF());
+}

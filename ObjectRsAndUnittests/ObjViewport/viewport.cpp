@@ -8,6 +8,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QCursor>
+#include <QVector>
 
 Viewport::Viewport(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -77,39 +78,42 @@ void Viewport::paintGL(){
     //out << " " << ' ' << m_camera.m_scale << '\n';
 
     m_grid->draw(m_modelViewMatrix, m_projectionMatrix);
+    for(auto it: m_drawableObjects){
+        it->draw(m_modelViewMatrix, m_projectionMatrix);
+    }
 
 
-    if(!m_shader->bind())
-        qFatal("Cannot bind shader");
+    // if(!m_shader->bind())
+    //     qFatal("Cannot bind shader");
 
-    m_shader->setUniformValue("modelViewMatrix", m_modelViewMatrix);
-    m_shader->setUniformValue("projectionMatrix", m_projectionMatrix);
-    m_shader->setUniformValue("fragmentColor", m_fragmentColor);
-    //m_shader->setUniformValue("lightDir", m_camera.m_currentCameraPosition);
-    m_shader->setUniformValue("drawPixelByNormalCoords", m_drawPixelByNormalCoords);
+    // m_shader->setUniformValue("modelViewMatrix", m_modelViewMatrix);
+    // m_shader->setUniformValue("projectionMatrix", m_projectionMatrix);
+    // m_shader->setUniformValue("fragmentColor", m_fragmentColor);
+    // //m_shader->setUniformValue("lightDir", m_camera.m_currentCameraPosition);
+    // m_shader->setUniformValue("drawPixelByNormalCoords", m_drawPixelByNormalCoords);
 
-    //QTextStream out(stdout);
-    //out << haveObjData << '\n';
+    // //QTextStream out(stdout);
+    // //out << haveObjData << '\n';
 
-    if(!m_vertexBuffer->bind())
-        qFatal("Cannot bind vertex buffer");
+    // if(!m_vertexBuffer->bind())
+    //     qFatal("Cannot bind vertex buffer");
 
-    m_shader->setAttributeBuffer("vertex", GL_FLOAT, 0, 3, 0);
-    m_shader->enableAttributeArray("vertex");
-    m_vertexBuffer->release();
+    // m_shader->setAttributeBuffer("vertex", GL_FLOAT, 0, 3, 0);
+    // m_shader->enableAttributeArray("vertex");
+    // m_vertexBuffer->release();
 
-    if(!m_normalsBuffer->bind())
-        qFatal("Cannot bind normals buffer");
+    // if(!m_normalsBuffer->bind())
+    //     qFatal("Cannot bind normals buffer");
 
-    m_shader->setAttributeBuffer("normal", GL_FLOAT, 0, 3, 0);
-    m_shader->enableAttributeArray("normal");
-    m_normalsBuffer->release();
+    // m_shader->setAttributeBuffer("normal", GL_FLOAT, 0, 3, 0);
+    // m_shader->enableAttributeArray("normal");
+    // m_normalsBuffer->release();
 
-    glDrawArrays(GL_TRIANGLES, 0, m_nVertices);
+    // glDrawArrays(GL_TRIANGLES, 0, m_nVertices);
 
-    m_shader->disableAttributeArray("vertex");
-    m_shader->disableAttributeArray("normal");
-    m_shader->release();
+    // m_shader->disableAttributeArray("vertex");
+    // m_shader->disableAttributeArray("normal");
+    // m_shader->release();
 }
 
 bool Viewport::addObject(QVector<QVector3D> vertices, QVector<int> polygonVertexIndices, QVector<int> startPolygon)
@@ -117,6 +121,7 @@ bool Viewport::addObject(QVector<QVector3D> vertices, QVector<int> polygonVertex
     QVector<int> triangleVertexIndices = MeshTools::buildTriangleVertexIndices(polygonVertexIndices, startPolygon);
     QVector<float> triangleVertexCoords = MeshTools::packTriangleVertexCoords(vertices, triangleVertexIndices);
     QVector<float> triangleNormalsCoords = MeshTools::buildAndPackTriangleNormalsCoords(vertices, triangleVertexIndices);
+
     m_vertexBuffer = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     if(!m_vertexBuffer->create())
         return false;
@@ -142,6 +147,16 @@ bool Viewport::addObject(QVector<QVector3D> vertices, QVector<int> polygonVertex
 
     m_camera.resetCamera();
     setFitToView(vertices);
+    return true;
+}
+
+bool Viewport::addObject(DrawableObject* obj)
+{
+    if(obj == nullptr)
+        return false;
+    m_drawableObjects.append(obj);
+    m_haveObjData = true;
+    m_camera.resetCamera();
     return true;
 }
 
