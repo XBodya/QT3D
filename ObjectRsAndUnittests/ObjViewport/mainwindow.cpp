@@ -10,6 +10,9 @@
 #include "../ObjReader/basetypes.h"
 #include <QColorDialog>
 
+#include <QListWidget>
+#include <QListWidgetItem>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -44,14 +47,17 @@ void MainWindow::loadMesh()
 
     DrawableMesh* mesh = new DrawableMesh(vertexShaderFilename, fragmentShaderFilename, triangleVertexCoords, triangleNormalsCoords);
 
-
     ui->m_viewport->makeCurrent();
     //ui->m_viewport->addObject(objData.m_vertices, objData.m_polygonVertexIndices, objData.m_startPolygonVertexIndices);
     ui->m_viewport->addObject(mesh);
+    QListWidgetItem* item = new QListWidgetItem(ui->m_objectList);
+    item->setText(fileName);
+    ui->m_objectList->addItem(item);
+    m_objectIndexInListWidget[fileName] = ui->m_viewport->drawableObjects().size() - 1;
     ui->m_viewport->update();
 }
 
-void MainWindow::changeMeshColor()
+void MainWindow::changeMeshColor(QString name)
 {
     QColor color = QColorDialog::getColor(Qt::white, this, "Choose color");
     if(!color.isValid())
@@ -59,8 +65,8 @@ void MainWindow::changeMeshColor()
         return;
     }
     ui->m_viewport->makeCurrent();
-    ui->m_viewport->changeFragmentColor(color);
-
+    DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[name]]);
+    mesh->setFragmentColor(color);
     ui->m_viewport->update();
 }
 
@@ -75,7 +81,7 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionColor_triggered()
 {
-    changeMeshColor();
+    changeMeshColor(ui->m_objectList->currentItem()->text());
 }
 
 
@@ -205,8 +211,15 @@ void MainWindow::on_actionFit_model_triggered()
 void MainWindow::on_m_checkBox_stateChanged(int arg1)
 {
     ui->m_viewport->makeCurrent();
-    ui->m_viewport->m_drawPixelByNormalCoords = arg1;
-
+    DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[ui->m_objectList->currentItem()->text()]]);
+    mesh->setToDrawNormalMap(arg1);
     ui->m_viewport->update();
+}
+
+
+void MainWindow::on_m_objectList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[ui->m_objectList->currentItem()->text()]]);
+    ui->m_checkBox->setCheckState(Qt::CheckState(mesh->toDrawNormalMap()));
 }
 

@@ -242,6 +242,11 @@ void Viewport::wheelEvent(QWheelEvent* event)
     this->update();
 }
 
+QVector<DrawableObject *> Viewport::drawableObjects() const
+{
+    return m_drawableObjects;
+}
+
 void Viewport::setFitToView(QVector<QVector3D> &vertices)
 {
     if(!m_haveObjData)

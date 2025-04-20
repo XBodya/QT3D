@@ -7,6 +7,7 @@
 #include <QVector3D>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
+#include <QMap>
 
 #include "drawablegrid.h"
 #include "drawableobject.h"
@@ -16,7 +17,6 @@
 class Viewport : public QOpenGLWidget
 {
     Q_OBJECT;
-    QPoint m_currentCursorPosition;
 public:
     Viewport(QWidget *parent = nullptr);
     ~Viewport();
@@ -45,8 +45,12 @@ public:
 
     float m_radiusOfModel = 0;
 
+    QVector<DrawableObject *> drawableObjects() const;
+
 protected:
+    QPoint m_currentCursorPosition;
     DrawableGrid* m_grid = nullptr;
+    //QMap<QString, int> m_meshIndices;
 
     void initializeGL() override;
     void resizeGL(int width, int height) override;
