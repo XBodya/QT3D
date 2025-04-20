@@ -19,6 +19,9 @@ public:
     void setShader(QString fragmentShaderFilename, QString vertexShaderFilename);
     QVector<QVector2D> getGrid2D();
     bool canToDraw();
+    QColor color() const;
+    void setColor(const QColor &newColor);
+
 protected:
     bool m_hasShaderToDraw = false;
     double m_size = 3.0;

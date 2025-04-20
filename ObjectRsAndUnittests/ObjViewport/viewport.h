@@ -38,7 +38,6 @@ public:
     QOpenGLShaderProgram* m_shader = nullptr;
     int m_nVertices = 0;
     QVector3D m_fragmentColor = {1.0f, 1.0f, 0.0f};
-    QVector4D m_backgroundColor = {0.5f, 0.5f, 0.5f, 1.0f};
     QVector3D m_rotateAngles = {0.0f, 0.0f, 0.0f};
     QVector3D m_modelMaxXYZ, m_modelMinXYZ, m_modelCenter;
 
@@ -47,7 +46,13 @@ public:
 
     QVector<DrawableObject *> drawableObjects() const;
 
+    DrawableGrid *grid() const;
+
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor &newBackgroundColor);
+
 protected:
+    QColor m_backgroundColor = QColor(128, 128, 128);
     QPoint m_currentCursorPosition;
     DrawableGrid* m_grid = nullptr;
     //QMap<QString, int> m_meshIndices;

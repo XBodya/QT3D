@@ -101,3 +101,13 @@ void DrawableGrid::draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix)
 bool DrawableGrid::canToDraw(){
     return m_hasShaderToDraw;
 }
+
+QColor DrawableGrid::color() const
+{
+    return m_color;
+}
+
+void DrawableGrid::setColor(const QColor &newColor)
+{
+    m_color = newColor;
+}

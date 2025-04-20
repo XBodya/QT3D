@@ -31,6 +31,8 @@ void MainWindow::loadMesh()
     //QString fileName = "C:/Users/games/gits/r3ds/ObjectRsAndUnittests/ObjViewport/teapot.obj";
     if(fileName.isEmpty())
         return;
+    if(m_objectIndexInListWidget.find(fileName) != m_objectIndexInListWidget.end())
+        return;
     ObjData objData;
     QString errorMsg;
     if(!ObjReadingTools::readFile(fileName, objData, errorMsg))
@@ -53,19 +55,20 @@ void MainWindow::loadMesh()
     QListWidgetItem* item = new QListWidgetItem(ui->m_objectList);
     item->setText(fileName);
     ui->m_objectList->addItem(item);
+    ui->m_objectList->setCurrentItem(item);
     m_objectIndexInListWidget[fileName] = ui->m_viewport->drawableObjects().size() - 1;
     ui->m_viewport->update();
 }
 
 void MainWindow::changeMeshColor(QString name)
 {
-    QColor color = QColorDialog::getColor(Qt::white, this, "Choose color");
+    DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[name]]);
+    QColor color = QColorDialog::getColor(mesh->fragmentColor(), this, "Choose color");
     if(!color.isValid())
     {
         return;
     }
     ui->m_viewport->makeCurrent();
-    DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[name]]);
     mesh->setFragmentColor(color);
     ui->m_viewport->update();
 }
@@ -81,6 +84,8 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionColor_triggered()
 {
+    if(ui->m_objectList->currentItem() == nullptr)
+        return;
     changeMeshColor(ui->m_objectList->currentItem()->text());
 }
 
@@ -221,5 +226,33 @@ void MainWindow::on_m_objectList_currentItemChanged(QListWidgetItem *current, QL
 {
     DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[ui->m_objectList->currentItem()->text()]]);
     ui->m_checkBox->setCheckState(Qt::CheckState(mesh->toDrawNormalMap()));
+}
+
+
+void MainWindow::on_actionGrid_Color_triggered()
+{
+    QColor color = QColorDialog::getColor(ui->m_viewport->grid()->color(), this, "Choose color");
+    if(!color.isValid())
+    {
+        return;
+    }
+    ui->m_viewport->makeCurrent();
+    ui->m_viewport->grid()->setColor(color);
+
+    ui->m_viewport->update();
+}
+
+
+void MainWindow::on_actionBackground_Color_triggered()
+{
+    QColor color = QColorDialog::getColor(ui->m_viewport->backgroundColor(), this, "Choose color");
+    if(!color.isValid())
+    {
+        return;
+    }
+    ui->m_viewport->makeCurrent();
+    ui->m_viewport->setBackgroundColor(color);
+
+    ui->m_viewport->update();
 }
 

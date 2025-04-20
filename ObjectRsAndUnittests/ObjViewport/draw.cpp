@@ -26,3 +26,7 @@ QVector3D GlDrawTools::toRGBf(QColor color)
 {
     return QVector3D(color.redF(), color.greenF(), color.blueF());
 }
+
+QVector4D GlDrawTools::toRGBAf(QColor color){
+    return QVector4D(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+}

@@ -78,6 +78,8 @@
     </property>
     <addaction name="actionFit_model"/>
     <addaction name="actionColor"/>
+    <addaction name="actionGrid_Color"/>
+    <addaction name="actionBackground_Color"/>
     <addaction name="actionRotate_by_Z_axis"/>
     <addaction name="actionRotate_by_X_axis"/>
     <addaction name="actionRotate_by_Y_axis"/>
@@ -227,6 +229,16 @@
    </property>
    <property name="shortcut">
     <string>Shift+Y</string>
+   </property>
+  </action>
+  <action name="actionGrid_Color">
+   <property name="text">
+    <string>Grid Color</string>
+   </property>
+  </action>
+  <action name="actionBackground_Color">
+   <property name="text">
+    <string>Background Color</string>
    </property>
   </action>
  </widget>

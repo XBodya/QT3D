@@ -47,7 +47,8 @@ void Viewport::resizeGL(int width, int height)
 }
 
 void Viewport::paintGL(){
-    glClearColor(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
+    QVector4D backColor = GlDrawTools::toRGBAf(m_backgroundColor);
+    glClearColor(backColor[0], backColor[1], backColor[2], backColor[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if(!m_haveObjData)
         return;
@@ -245,6 +246,21 @@ void Viewport::wheelEvent(QWheelEvent* event)
 QVector<DrawableObject *> Viewport::drawableObjects() const
 {
     return m_drawableObjects;
+}
+
+DrawableGrid *Viewport::grid() const
+{
+    return m_grid;
+}
+
+QColor Viewport::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+void Viewport::setBackgroundColor(const QColor &newBackgroundColor)
+{
+    m_backgroundColor = newBackgroundColor;
 }
 
 void Viewport::setFitToView(QVector<QVector3D> &vertices)

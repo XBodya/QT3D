@@ -60,6 +60,10 @@ private slots:
 
     void on_m_objectList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
+    void on_actionGrid_Color_triggered();
+
+    void on_actionBackground_Color_triggered();
+
 private:
     Ui::MainWindow *ui;
 };
