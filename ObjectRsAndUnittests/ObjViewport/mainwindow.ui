@@ -71,6 +71,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionRemove_current_object"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -239,6 +240,11 @@
   <action name="actionBackground_Color">
    <property name="text">
     <string>Background Color</string>
+   </property>
+  </action>
+  <action name="actionRemove_current_object">
+   <property name="text">
+    <string>Remove current object</string>
    </property>
   </action>
  </widget>

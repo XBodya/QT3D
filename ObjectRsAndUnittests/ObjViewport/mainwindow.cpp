@@ -44,7 +44,8 @@ void MainWindow::loadMesh()
     QString fragmentShaderFilename = "C:\\Users\\games\\gits\\r3ds\\ObjectRsAndUnittests\\ObjViewport\\FragmentShader.frag";
     QVector<int> triangleVertexIndices = MeshTools::buildTriangleVertexIndices(objData.m_polygonVertexIndices, objData.m_startPolygonVertexIndices);
     QVector<float> triangleVertexCoords = MeshTools::packTriangleVertexCoords(objData.m_vertices, triangleVertexIndices);
-    QVector<float> triangleNormalsCoords = MeshTools::buildAndPackTriangleNormalsCoords(objData.m_vertices, triangleVertexIndices);
+    QVector<QVector3D> normals = MeshTools::createNormalsForVertices(objData.m_vertices, triangleVertexIndices);
+    QVector<float> triangleNormalsCoords = MeshTools::packTriangleVertexCoords(normals, triangleVertexIndices);
 
 
     DrawableMesh* mesh = new DrawableMesh(vertexShaderFilename, fragmentShaderFilename, triangleVertexCoords, triangleNormalsCoords);
@@ -217,13 +218,23 @@ void MainWindow::on_m_checkBox_stateChanged(int arg1)
 {
     ui->m_viewport->makeCurrent();
     DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[ui->m_objectList->currentItem()->text()]]);
-    mesh->setToDrawNormalMap(arg1);
+    mesh->setToDrawNormalMap(bool(arg1));
     ui->m_viewport->update();
 }
 
 
 void MainWindow::on_m_objectList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+    if(current == nullptr)
+    {
+        if(previous != nullptr)
+        {
+            ui->m_objectList->setCurrentItem(previous);
+            return;
+        }
+        ui->m_objectList->setCurrentItem(nullptr);
+        return;
+    }
     DrawableMesh* mesh = static_cast<DrawableMesh*> (ui->m_viewport->drawableObjects()[m_objectIndexInListWidget[ui->m_objectList->currentItem()->text()]]);
     ui->m_checkBox->setCheckState(Qt::CheckState(mesh->toDrawNormalMap()));
 }
@@ -253,6 +264,20 @@ void MainWindow::on_actionBackground_Color_triggered()
     ui->m_viewport->makeCurrent();
     ui->m_viewport->setBackgroundColor(color);
 
+    ui->m_viewport->update();
+}
+
+
+void MainWindow::on_actionRemove_current_object_triggered()
+{
+    if(ui->m_objectList->currentItem() == nullptr)
+        return;
+    //
+    QListWidgetItem *deleteMarkedItem = ui->m_objectList->takeItem(ui->m_objectList->currentRow());
+    ui->m_viewport->removeObject(m_objectIndexInListWidget[deleteMarkedItem->text()]);
+    m_objectIndexInListWidget.remove(deleteMarkedItem->text());
+    delete deleteMarkedItem;
+    ui->m_viewport->makeCurrent();
     ui->m_viewport->update();
 }
 

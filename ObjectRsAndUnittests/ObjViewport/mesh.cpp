@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include <QVector>
 
 QVector<int> MeshTools::buildTriangleVertexIndices(QVector<int> &polygonVertexIndices, QVector<int> &startPolygon)
 {
@@ -111,3 +112,22 @@ QVector<float> MeshTools::pack2DLinesTo3D(QVector<QVector2D> lines, int zeroCoor
     return packedLines;
 }
 
+QVector<QVector3D> MeshTools::createNormalsForVertices(const QVector<QVector3D> &vertices, const QVector<int> &polygonTriangleVertexIndices)
+{
+    QVector<QVector3D> camulativeNormalToVertex(vertices.size());
+    for(int i = 0; i < polygonTriangleVertexIndices.size(); i += 3)
+    {
+        int vInd1 = polygonTriangleVertexIndices[i],
+            vInd2 = polygonTriangleVertexIndices[i + 1],
+            vInd3 = polygonTriangleVertexIndices[i + 2];
+        QVector3D normal = QVector3D::normal(vertices[vInd1], vertices[vInd2], vertices[vInd3]);
+        camulativeNormalToVertex[vInd1] += normal;
+        camulativeNormalToVertex[vInd2] += normal;
+        camulativeNormalToVertex[vInd3] += normal;
+    }
+    for(auto &curNormal: camulativeNormalToVertex)
+    {
+        curNormal.normalize();
+    }
+    return camulativeNormalToVertex;
+}

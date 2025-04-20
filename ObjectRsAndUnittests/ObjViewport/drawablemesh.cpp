@@ -41,6 +41,7 @@ void DrawableMesh::draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix){
     m_shader->setUniformValue("projectionMatrix", projectionMatrix);
     m_shader->setUniformValue("fragmentColor", GlDrawTools::toRGBf(m_fragmentColor));
     m_shader->setUniformValue("drawPixelByNormalCoords", m_toDrawNormalMap);
+    //m_shader->setUniformValue("normalMatrix", viewMatrix.inverted().transposed());
 
     if(!m_vertices->bind())
         qFatal("Cannot bind vertex buffer");

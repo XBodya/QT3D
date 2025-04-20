@@ -14,7 +14,7 @@ namespace MeshTools
     QVector3D getCentreBoundingBox(QVector3D maxXYZ, QVector3D minXYZ);
     QVector<float> pack2DLinesTo3D(QVector<QVector2D> lines, int zeroCoordIndex);
     QVector3D makeVector3D(QVector2D point, int zeroCoordIndex);
-
+    QVector<QVector3D> createNormalsForVertices(const QVector<QVector3D> &vertices, const QVector<int> &polygonTriangleVertexIndices);
 }
 
 #endif // MESH_H

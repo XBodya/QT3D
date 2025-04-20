@@ -19,6 +19,7 @@ void main(void)
     if(drawPixelByNormalCoords)
     {
         vec3 normalColor = vec3(abs(m_normal[0]), abs(m_normal[1]), abs(m_normal[2]));
+        //gl_FragColor = vec4(normalColor, 1);
         gl_FragColor = vec4(normalColor * ambientAmount + normalColor * diffuse * diffuseAmount + specular * specularAmount, 1.0);
     }
     else

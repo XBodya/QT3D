@@ -23,6 +23,7 @@ public:
 
     bool addObject(QVector<QVector3D> vertices, QVector<int> polygonVertexIndices, QVector<int> startPolygon);
     bool addObject(DrawableObject* obj);
+    bool removeObject(int deletableInd);
     QOpenGLShaderProgram* createShaderProgram(QString vertexShaderFilename, QString fragmentShaderFilename);
     bool changeFragmentColor(QColor color);
     void changeRotateAngles(QVector3D dAngles);

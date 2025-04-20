@@ -79,6 +79,8 @@ void Viewport::paintGL(){
     //out << " " << ' ' << m_camera.m_scale << '\n';
 
     m_grid->draw(m_modelViewMatrix, m_projectionMatrix);
+    if(m_drawableObjects.isEmpty())
+        return;
     for(auto it: m_drawableObjects){
         it->draw(m_modelViewMatrix, m_projectionMatrix);
     }
@@ -324,5 +326,13 @@ void Viewport::changeRotateAngles(QVector3D dAngles)
             m_rotateAngles[i] = 360.0f - m_rotateAngles[i];
         }
     }
+}
+
+bool Viewport::removeObject(int deletableInd)
+{
+    if(deletableInd >= m_drawableObjects.size() or deletableInd < 0)
+        return false;
+    m_drawableObjects.remove(deletableInd);
+    return true;
 }
 
